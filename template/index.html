@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forum</title>
+</head>
+<body>
+{% include 'login_bar.html'%}
+
+{% for art_params in article %}
+<div class='article_rew'>
+    <a href="{% url 'article' art_params.url %}">{{art_params.title}}</a>
+    <p>{{art_params.text}}</p>
+{% endfor %}
+</div> 
+
+<div class='signup'>
+    <p><a href="{% url 'signup' %}">Sign up</a></p>
+</div>
+
+</body>
+</html>

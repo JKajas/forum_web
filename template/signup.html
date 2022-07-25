@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <a class>Login:{{form3.username}}</a>
+    <a class="email">Email:{{form3.email}}</a>
+    <a class="password1"></a>Password: {{form3.password1}}
+    <a class="password1"></a>Repeat Password: {{form3.password2}}
+    <button>Submit</button>
+</form>
+
+</body>
+</html>

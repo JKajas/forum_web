@@ -1,0 +1,9 @@
+docker*
+Dockerfile
+.dockerignore
+requirements.txt 
+/data/
+/data/**
+setup.sh
+/emails/**
+__pycache__/

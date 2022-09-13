@@ -1,7 +1,9 @@
-from django.test import TestCase, RequestFactory
-from forum_comments import views, models
+from django.conf import settings
 from django.contrib.auth.models import Permission
-from django.conf import settings 
+from django.test import RequestFactory, TestCase
+
+from forum_comments import models, views
+
 '''
 Simple unit test checking creating process of user, allowed hosts, 
 and view with login required decorator

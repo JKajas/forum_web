@@ -1,47 +1,49 @@
+import datetime
+import os
+
 from django.contrib.auth.backends import BaseBackend
-from forum_comments.models import UserModel 
 from django.core.mail.backends.filebased import EmailBackend
-import datetime, os
 
+from forum_comments.models import UserModel
 
-'''
+"""
 Simple backend to authenticate user. If user is member of organization
 could be log in entering only alias from email(email is login)
-'''
+"""
 
 
 class UserBackend(BaseBackend):
     def authenticate(self, request, email=None, password=None):
-            loginobj = UserModel.objects.filter(email__startswith=email) 
-            for users in loginobj:
-                if users.organization_id is not None: 
-                    pass_valid = users.check_password(password)
-                    if pass_valid:
-                        user = UserModel.objects.get(username = users.username) 
-                        print(user)
+        loginobj = UserModel.objects.filter(email__startswith=email)
+        for users in loginobj:
+            if users.organization_id is not None:
+                pass_valid = users.check_password(password)
+                if pass_valid:
+                    user = UserModel.objects.get(username=users.username)
+                    return user
+            else:
+                try:
+                    user = UserModel.objects.get(email=email)
+                    pass_vaild = user.check_password(password)
+                    if pass_vaild:
                         return user
-                else:
-                    try:
-                        user = UserModel.objects.get(email=email)
-                        pass_vaild = user.check_password(password)
-                        print(pass_vaild)
-                        if pass_vaild:
-                            return user 
-                        else:
-                            return None
-                    except:
+                    else:
                         return None
-                        ##Ma zwracać błąd 
+                except:
+                    return None
+
     def get_user(self, user_id):
         try:
             return UserModel.objects.get(pk=user_id)
         except:
             UserModel.DoesNotExist
-            return None     
+            return None
 
-'''
+
+"""
 Corrected EmailBackand saving emails for dev environment in .eml format
-'''
+"""
+
 
 class NewEmailBackend(EmailBackend):
     def _get_filename(self):

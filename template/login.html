@@ -1,0 +1,48 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum - login</title>
+    <style>
+        body {
+            padding-top: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'nav_bar.html' %}
+    <div class="row justify-content-md-center">
+        <div class="col-4 list-group ">
+            <div class="list-group-item">
+                {{form.non_field_errors}}
+                <form class="" method="post">
+                    {%csrf_token%}
+                    <div class="mb-3">
+                        <i style="float:right;flex:none;" role="button" class="bi bi-question-circle"
+                            data-bs-toggle="popover" data-bs-title="Login with alias"
+                            data-bs-content="If you are member of any organization, you can login with your email alias."></i>
+                        {{form.username|as_crispy_field}}
+
+                    </div>
+                    <div class="mb-3">
+                        {{form.password|as_crispy_field}}
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary text-start">Submit</button>
+                    <span style="float:right;"> Forgot your password? <a href="{% url 'resetpassword' %}">Reset
+                            here</a></span>
+                </form>
+                <script>
+                    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+                    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

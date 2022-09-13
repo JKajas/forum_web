@@ -1,55 +1,95 @@
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer ></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        defer></script>
     <script>
-    function ajax_req(id){
-        $.ajax({
-            type: 'post',
-            url: '',
-            data: {
-                "delete": id,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            },
-            success: $("#comment"+id).remove()
-        })
-    }
-    </script>        
-    <title>Document</title>
+        function ajax_req(id) {
+            $.ajax({
+                type: 'post',
+                url: '',
+                data: {
+                    "delete": id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: $("#comment" + id).remove()
+            })
+        }
+    </script>
+
+    <title>{{article.title}}</title>
 </head>
+
 <body>
-{% csrf_token %}
-<div class="article">
-
-<h3> {{article.title}}</h3>
-<p>{{article.author}}</p>
-<p>{{article.date}}</p>
-<p>{{article.text}}</p>
-</div>
-<div class="comments_add">
-{% if user.is_authenticated %}
-<form method="post">
+    {% include 'nav_bar.html'%}
     {% csrf_token %}
-    {{comment_form.text}}
-    <button>Submit</button>
-</form>
-{% endif %}
+    <center>
 
-<div class='comments_section'>
+        <div class="article col-6" style="margin-top: 100px;">
+            <h2 style="font-family:serif"> {{article.title}}</h3>
 
-{% for com in comments %}
-<div id="comment{{com.id}}">
-<p>{{com.author}}</p>
-{% if user == com.author %}
-<button id="del_com" onclick="ajax_req('{{com.id}}')"> Delete </button>
-{% endif %}
-<p>{{com.date}}</p>
-<p>{{com.text}}</p>
-{% endfor %}
-</div>
-</div>
+
+                <p style="float:left">Autor: {{article.author}}</p>
+                <p style="float:right">{{article.date}}</p>
+                <p></p>
+                <img style="width: 100%; height: auto;" src={{article.image.url}}></img>
+                <div style="text-align: left;padding-top: 30px ;">{{article.text|safe}}</div>
+                <div class="comments_add" style="text-align: left;width: 100%;padding-top: 50px;">
+                    {% if user.is_authenticated %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-inline-block" style=" width: 40%;">{{form.text|as_crispy_field}}</div>
+                        <button class="btn btn-outline-primary">Submit</button>
+
+                    </form>
+                    {% endif %}
+                </div>
+                <div style="padding-top: 50px; text-align:left;" class='comments_section'>
+                    {% for com in comments %}
+                    <div id="comment{{com.id}}">
+                        <span style="font-weight: bold;">{{com.author}}</span>
+                        {% if user == com.author %}
+                        <button style="display:inline;" type="button" class="btn btn-outline-primary"
+                            data-bs-toggle="modal" data-bs-target="#Modal{{com.id}}">Delete</button>
+
+                        <div class="modal fade" id="Modal{{com.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Deleting comment</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Would you like to delete your comment?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="ajax_req('{{com.id}}')">Yes</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <p style="font-size:12px; padding-top:3px;">{{com.date}}</p>
+                        <p>{{com.text}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+        </div>
+    </center>
+
 </body>
+
 </html>

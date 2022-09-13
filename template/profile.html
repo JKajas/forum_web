@@ -1,16 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+  <script>
+    function ajax_req(id) {
+      $.ajax({
+        type: 'post',
+        url: '',
+        data: {
+          "delete": id,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: $("#article" + id).remove()
+      })
+    }
+  </script>
+  <title>Forum {{user.username}}'s profile</title>
 </head>
+
 <body>
-<a href="{% url 'add_article' user.username %}">Add article</a>
-{% for article in users_article %}
-<p>{{article.title}}</p>
-<p>{{article.text}}</p>
-{% endfor %}
+  {% include 'nav_bar.html'%}
+
+  <div class=row>
+    <div class="col-4" style="margin-top: 80px">
+      <center>
+        <a style="margin-bottom: 10px;" class="btn btn-outline-primary "
+          href="{% url 'add_article' user.username %}">Add article</a>
+      </center>
+      <div class="list-group">
+        {% for article in users_article %}
+        <li class="list-group-item d-flex justify-content-between align-items-center" id="article{{article.id}}">
+          <a href="{% url 'article' article.url %}" class="list-group-item list-group-item-action">{{article.title}}</a>
+          <button type="button" style="color:red;" class="bi bi-trash btn btn-xs btn-default" data-bs-toggle="modal"
+            data-bs-target="#Modal{{article.id}}"></button>
+        </li>
+        <div class="modal fade" id="Modal{{article.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete article</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Would you like to delete this article?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal"
+                  onclick="ajax_req('{{article.id}}')">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
 </body>
+
 </html>

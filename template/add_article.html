@@ -1,20 +1,36 @@
-
+{% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Forum - add article</title>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 </head>
-<body>
-<form method="post">
-{%csrf_token%}
-Title:{{form2.title}}
-Text:{{form2.text}}
-<button>Submit</button>
-</form>
 
+<body>
+    {% include 'nav_bar.html'%}
+    <div class="row justify-content-md-center">
+        <div class="col-5 list-group" style="width:45.499999995%; margin-top: 100px;">
+            <div class="list-group-item">
+                <form method="post" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    {{form.title|as_crispy_field}}
+                    {{form.image|as_crispy_field}}
+                    {{form.text|as_crispy_field}}
+                    <center>
+                        <button type="submit" class="btn btn-outline-primary ">Submit</button>
+                    </center>
+                </form>
+
+            </div>
+        </div>
+    </div>
 
 </body>
+
 </html>
